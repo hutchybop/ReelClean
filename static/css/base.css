@@ -36,6 +36,11 @@ body {
   border: 1px solid var(--rc-border);
 }
 
+.card-solid {
+  background: var(--rc-card);
+  border: 1px solid var(--rc-border);
+}
+
 .hero-title {
   font-family: "Bebas Neue", "Arial Narrow", sans-serif;
   letter-spacing: 0.03em;

@@ -1,3 +1,25 @@
+.table {
+  table-layout: fixed;
+  width: 100%;
+}
+
 .actions-column {
   min-width: 320px;
+}
+
+#th-movie-file {
+  width: 40%;
+}
+
+#th-proposal {
+  width: 30%;
+}
+
+#th-actions {
+  width: 30%;
+}
+
+#th-movie-file + td {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }

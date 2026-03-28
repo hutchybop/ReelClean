@@ -17,15 +17,19 @@
     <h2 class="h5 mb-3">Rename Stage Result</h2>
     <div class="row g-3">
       <div class="col-md-6">
-        <div class="p-3 rounded-3 bg-body-tertiary">
-          <div class="small text-body-secondary">Successful Operations</div>
-          <div class="h3 mb-0">{{ job.rename_result.successful_operations }}</div>
+        <div class="card card-solid border-0 h-100">
+          <div class="card-body">
+            <div class="small text-body-secondary">Successful Operations</div>
+            <div class="display-6 fw-semibold text-success">{{ job.rename_result.successful_operations }}</div>
+          </div>
         </div>
       </div>
       <div class="col-md-6">
-        <div class="p-3 rounded-3 bg-body-tertiary">
-          <div class="small text-body-secondary">Failed Operations</div>
-          <div class="h3 mb-0">{{ job.rename_result.failed_operations }}</div>
+        <div class="card card-solid border-0 h-100">
+          <div class="card-body">
+            <div class="small text-body-secondary">Failed Operations</div>
+            <div class="display-6 fw-semibold text-danger">{{ job.rename_result.failed_operations }}</div>
+          </div>
         </div>
       </div>
     </div>

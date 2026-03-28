@@ -154,6 +154,8 @@ def create_app() -> Flask:
             manager.set_decision(job_id, movie_id, Decision.ACCEPT)
         elif raw_decision == Decision.SKIP.value:
             manager.set_decision(job_id, movie_id, Decision.SKIP)
+        elif raw_decision == "cancel":
+            manager.set_decision(job_id, movie_id, Decision.PENDING)
         else:
             flash("Invalid decision action", "danger")
 
@@ -213,8 +215,6 @@ def create_app() -> Flask:
     @app.get("/jobs/<job_id>/results")
     def results_page(job_id: str):
         job = get_job_or_404(job_id)
-        if job.includes_quality and job.quality_results:
-            return redirect(url_for("quality_page", job_id=job_id))
         return render_template("results.html", job=job)
 
     @app.get("/jobs/<job_id>/quality")
