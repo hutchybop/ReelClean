@@ -24,7 +24,6 @@ gaffer/
 venv/
 .venv/
 .envrc
-.github/
 .vscode/
 .idea/
 rename_env/

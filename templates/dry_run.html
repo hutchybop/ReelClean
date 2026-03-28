@@ -15,7 +15,15 @@
 </div>
 
 <div class="row g-3 mb-4">
-  <div class="col-md-4">
+  <div class="col-md-3">
+    <div class="card border-0 shadow-sm h-100">
+      <div class="card-body">
+        <div class="text-body-secondary small">Proposed</div>
+        <div class="display-6 fw-semibold">{{ job.proposed_count }}</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
     <div class="card border-0 shadow-sm h-100">
       <div class="card-body">
         <div class="text-body-secondary small">Accepted</div>
@@ -23,7 +31,7 @@
       </div>
     </div>
   </div>
-  <div class="col-md-4">
+  <div class="col-md-3">
     <div class="card border-0 shadow-sm h-100">
       <div class="card-body">
         <div class="text-body-secondary small">Skipped</div>
@@ -31,11 +39,11 @@
       </div>
     </div>
   </div>
-  <div class="col-md-4">
+  <div class="col-md-3">
     <div class="card border-0 shadow-sm h-100">
       <div class="card-body">
-        <div class="text-body-secondary small">Movies Found</div>
-        <div class="display-6 fw-semibold">{{ job.proposals|length }}</div>
+        <div class="text-body-secondary small">Retried</div>
+        <div class="display-6 fw-semibold">{{ job.retried_count }}</div>
       </div>
     </div>
   </div>
@@ -75,7 +83,12 @@
           </td>
           <td>
             {% if proposal.target_name %}
-            <div>{{ proposal.target_name }}</div>
+            <div>
+              {{ proposal.target_name }}
+              {% if proposal.retry_count > 0 %}
+              <span class="badge text-bg-info ms-1">retried</span>
+              {% endif %}
+            </div>
             <div class="small text-body-secondary text-break">{{ proposal.target_movie_path }}</div>
             {% else %}
             <span class="text-body-secondary">No match yet</span>
@@ -97,11 +110,11 @@
           </td>
           <td>
             {% if proposal.decision.value == 'accept' %}
-            <span class="badge text-bg-success">accept</span>
+            <span class="badge text-bg-success">accepted</span>
             {% elif proposal.decision.value == 'skip' %}
-            <span class="badge text-bg-secondary">skip</span>
+            <span class="badge text-bg-secondary">skipped</span>
             {% else %}
-            <span class="badge text-bg-light">pending</span>
+            <span class="badge text-bg-light">proposed</span>
             {% endif %}
           </td>
           <td>

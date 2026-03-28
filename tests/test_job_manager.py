@@ -44,6 +44,16 @@ class JobManagerTests(unittest.TestCase):
             renamed_path = root / "Movie (2020)" / "Movie (2020).mkv"
             self.assertTrue(renamed_path.exists())
 
+    def test_rejects_job_outside_allowed_roots(self) -> None:
+        with tempfile.TemporaryDirectory() as allowed_tmp, tempfile.TemporaryDirectory() as other_tmp:
+            allowed_root = Path(allowed_tmp)
+            other_root = Path(other_tmp)
+            (other_root / "Movie.Name.2020.mkv").write_bytes(b"video")
+
+            manager = JobManager(allowed_roots=[allowed_root])
+            with self.assertRaises(ValueError):
+                manager.create_job(MODE_RENAME_ONLY, other_root, FakeTMDB())
+
 
 if __name__ == "__main__":
     unittest.main()

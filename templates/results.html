@@ -21,17 +21,50 @@
     <div class="row g-3">
       <div class="col-md-6">
         <div class="p-3 rounded-3 bg-body-tertiary">
-          <div class="small text-body-secondary">Successful</div>
-          <div class="h3 mb-0">{{ job.rename_result.successful_operations }}</div>
+          <div class="small text-body-secondary">Renamed</div>
+          <div class="h3 mb-0">{{ job.rename_result.rename_operations | selectattr('status', 'equalto', 'success') | list | length }}</div>
         </div>
       </div>
       <div class="col-md-6">
         <div class="p-3 rounded-3 bg-body-tertiary">
           <div class="small text-body-secondary">Failed</div>
-          <div class="h3 mb-0">{{ job.rename_result.failed_operations }}</div>
+          <div class="h3 mb-0">{{ job.rename_result.rename_operations | selectattr('status', 'equalto', 'failed') | list | length }}</div>
         </div>
       </div>
     </div>
+
+    {% if job.rename_result.rename_operations %}
+    <div class="table-responsive mt-4">
+      <table class="table align-middle mb-0">
+        <thead>
+          <tr>
+            <th>Operation</th>
+            <th>Source</th>
+            <th>Target</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in job.rename_result.rename_operations %}
+          <tr>
+            <td>{{ item.kind }}</td>
+            <td class="text-break"><code>{{ item.source }}</code></td>
+            <td class="text-break"><code>{{ item.target }}</code></td>
+            <td>
+              {% if item.status == 'success' %}
+              <span class="badge text-bg-success">renamed</span>
+              {% elif item.status == 'failed' %}
+              <span class="badge text-bg-danger">failed</span>
+              {% else %}
+              <span class="badge text-bg-secondary">{{ item.status }}</span>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% endif %}
 
     {% set rename_failed = job.rename_result.rename_operations | selectattr('status', 'equalto', 'failed') | list %}
     {% if rename_failed %}
@@ -57,17 +90,48 @@
     <div class="row g-3">
       <div class="col-md-6">
         <div class="p-3 rounded-3 bg-body-tertiary">
-          <div class="small text-body-secondary">Successful</div>
-          <div class="h3 mb-0">{{ job.cleanup_result.successful_operations }}</div>
+          <div class="small text-body-secondary">Deleted</div>
+          <div class="h3 mb-0">{{ job.cleanup_result.cleanup_operations | selectattr('status', 'equalto', 'success') | list | length }}</div>
         </div>
       </div>
       <div class="col-md-6">
         <div class="p-3 rounded-3 bg-body-tertiary">
           <div class="small text-body-secondary">Failed</div>
-          <div class="h3 mb-0">{{ job.cleanup_result.failed_operations }}</div>
+          <div class="h3 mb-0">{{ job.cleanup_result.cleanup_operations | selectattr('status', 'equalto', 'failed') | list | length }}</div>
         </div>
       </div>
     </div>
+
+    {% if job.cleanup_result.cleanup_operations %}
+    <div class="table-responsive mt-4">
+      <table class="table align-middle mb-0">
+        <thead>
+          <tr>
+            <th>Source</th>
+            <th>Status</th>
+            <th>Message</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in job.cleanup_result.cleanup_operations %}
+          <tr>
+            <td class="text-break"><code>{{ item.source }}</code></td>
+            <td>
+              {% if item.status == 'success' %}
+              <span class="badge text-bg-success">deleted</span>
+              {% elif item.status == 'failed' %}
+              <span class="badge text-bg-danger">failed</span>
+              {% else %}
+              <span class="badge text-bg-secondary">{{ item.status }}</span>
+              {% endif %}
+            </td>
+            <td class="small">{{ item.message }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% endif %}
 
     {% set cleanup_failed = job.cleanup_result.cleanup_operations | selectattr('status', 'equalto', 'failed') | list %}
     {% if cleanup_failed %}

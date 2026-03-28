@@ -74,6 +74,18 @@ class JobState:
 
         return sum(1 for item in self.proposals if item.decision == Decision.SKIP)
 
+    @property
+    def proposed_count(self) -> int:
+        """Count proposals still pending a final decision."""
+
+        return sum(1 for item in self.proposals if item.decision == Decision.PENDING)
+
+    @property
+    def retried_count(self) -> int:
+        """Count proposals retried at least once."""
+
+        return sum(1 for item in self.proposals if item.retry_count > 0)
+
 
 class JobNotFoundError(KeyError):
     """Raised when a job id does not exist in the manager."""
@@ -88,15 +100,36 @@ def utcnow() -> datetime:
 class JobManager:
     """Thread-safe in-memory job manager."""
 
-    def __init__(self) -> None:
+    def __init__(self, allowed_roots: list[Path] | None = None) -> None:
         self._jobs: dict[str, JobState] = {}
         self._lock = Lock()
+        self._allowed_roots = [root.expanduser().resolve() for root in (allowed_roots or [])]
+
+    def _is_allowed_root(self, candidate: Path) -> bool:
+        if not self._allowed_roots:
+            return True
+
+        try:
+            resolved = candidate.expanduser().resolve()
+        except OSError:
+            return False
+
+        for allowed in self._allowed_roots:
+            try:
+                resolved.relative_to(allowed)
+                return True
+            except ValueError:
+                continue
+        return False
 
     def create_job(self, mode: str, root_dir: Path, tmdb_client: TMDBClient) -> JobState:
         """Create and initialize a new job for the selected mode."""
 
         if mode not in VALID_MODES:
             raise ValueError(f"Invalid mode: {mode}")
+
+        if not self._is_allowed_root(root_dir):
+            raise ValueError(f"Directory is outside allowed roots: {root_dir}")
 
         now = utcnow()
         job_id = uuid4().hex[:12]
@@ -189,6 +222,7 @@ class JobManager:
             proposals=job.proposals,
             cleanup_candidates=[],
             allow_overwrite=False,
+            safe_root=job.root_dir,
         )
 
         job.cleanup_candidates = discover_cleanup_candidates(job.root_dir)
@@ -223,6 +257,7 @@ class JobManager:
             proposals=[],
             cleanup_candidates=selected_candidates,
             allow_overwrite=False,
+            safe_root=job.root_dir,
         )
 
         if job.includes_quality:

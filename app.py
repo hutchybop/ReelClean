@@ -37,7 +37,11 @@ def create_app() -> Flask:
         api_key=config.tmdb_api_key,
         timeout_seconds=config.tmdb_timeout_seconds,
     )
-    manager = JobManager()
+    initial_allowed_roots = [
+        option.path.expanduser().resolve(strict=False)
+        for option in discover_directory_options(config)
+    ]
+    manager = JobManager(allowed_roots=initial_allowed_roots)
 
     mode_labels = {
         MODE_RENAME_ONLY: "Rename only",
@@ -45,10 +49,19 @@ def create_app() -> Flask:
         MODE_QUALITY_ONLY: "Quality check only",
     }
 
+    job_status_badges = {
+        "created": "text-bg-secondary",
+        "planned": "text-bg-info",
+        "quality_ready": "text-bg-info",
+        "awaiting_cleanup": "text-bg-warning",
+        "completed": "text-bg-success",
+    }
+
     @app.context_processor
     def inject_globals() -> dict[str, object]:
         return {
             "mode_labels": mode_labels,
+            "job_status_badges": job_status_badges,
         }
 
     def resolve_allowed_dirs() -> list[tuple[str, str, Path]]:

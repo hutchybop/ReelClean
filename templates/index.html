@@ -86,7 +86,9 @@
           <tr>
             <td><code>{{ job.job_id }}</code></td>
             <td>{{ mode_labels.get(job.mode, job.mode) }}</td>
-            <td><span class="badge text-bg-secondary">{{ job.status }}</span></td>
+            <td>
+              <span class="badge {{ job_status_badges.get(job.status, 'text-bg-secondary') }}">{{ job.status }}</span>
+            </td>
             <td>{{ job.root_dir }}</td>
             <td class="text-end"><a href="{{ url_for('job_overview', job_id=job.job_id) }}" class="btn btn-sm btn-outline-light">Open</a></td>
           </tr>

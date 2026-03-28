@@ -1,0 +1,18 @@
+services:
+  reelclean:
+    image: ghcr.io/hutchybop/reelclean:latest
+    container_name: reelclean
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      FLASK_SECRET_KEY: change-me
+      TMDB_API_KEY: your_tmdb_api_key
+      TMDB_TIMEOUT_SECONDS: "10"
+      FFPROBE_BIN: ffprobe
+      REELCLEAN_ALLOWED_DIRS: Movies:/data/movies,Downloads:/data/downloads
+      REELCLEAN_HOST: 0.0.0.0
+      REELCLEAN_PORT: "8000"
+    volumes:
+      - /srv/media/movies:/data/movies
+      - /srv/media/downloads:/data/downloads

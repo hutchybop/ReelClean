@@ -31,6 +31,10 @@ class FlaskAppTests(unittest.TestCase):
             self.assertEqual(index_resp.status_code, 200)
             self.assertIn(b"Create Job", index_resp.data)
 
+            health_resp = client.get("/health")
+            self.assertEqual(health_resp.status_code, 200)
+            self.assertEqual(health_resp.json, {"status": "ok"})
+
             create_resp = client.post(
                 "/jobs",
                 data={"directory": str(root.resolve()), "mode": "quality_only"},

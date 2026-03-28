@@ -15,12 +15,34 @@ from .models import (
 )
 
 
+def _is_within_root(path: Path, safe_root: Path) -> bool:
+    """Return True when path is inside safe_root."""
+
+    try:
+        resolved_path = path.resolve(strict=False)
+        resolved_root = safe_root.resolve(strict=False)
+        resolved_path.relative_to(resolved_root)
+        return True
+    except (ValueError, OSError, RuntimeError):
+        return False
+
+
 def _rename_path(
     source: Path,
     target: Path,
     kind: str,
     allow_overwrite: bool,
+    safe_root: Path | None,
 ) -> OperationResult:
+    if safe_root and (not _is_within_root(source, safe_root) or not _is_within_root(target, safe_root)):
+        return OperationResult(
+            kind=kind,
+            source=source,
+            target=target,
+            status="failed",
+            message="Path is outside allowed root",
+        )
+
     if not source.exists():
         return OperationResult(
             kind=kind,
@@ -109,6 +131,7 @@ def execute_plan(
     proposals: list[RenameProposal],
     cleanup_candidates: list[CleanupCandidate],
     allow_overwrite: bool = False,
+    safe_root: Path | None = None,
 ) -> ExecutionResult:
     """Apply accepted rename proposals and selected cleanup deletions."""
 
@@ -147,6 +170,7 @@ def execute_plan(
             target=proposal.target_movie_path,
             kind="rename_movie",
             allow_overwrite=allow_overwrite,
+            safe_root=safe_root,
         )
         result.rename_operations.append(movie_result)
 
@@ -162,12 +186,26 @@ def execute_plan(
                 target=target_sub,
                 kind="rename_subtitle",
                 allow_overwrite=allow_overwrite,
+                safe_root=safe_root,
             )
             result.rename_operations.append(subtitle_result)
 
     for candidate in cleanup_candidates:
         if not candidate.selected:
             continue
+
+        if safe_root and not _is_within_root(candidate.path, safe_root):
+            result.cleanup_operations.append(
+                OperationResult(
+                    kind="cleanup",
+                    source=candidate.path,
+                    target=None,
+                    status="failed",
+                    message="Path is outside allowed root",
+                )
+            )
+            continue
+
         result.cleanup_operations.append(_delete_candidate(candidate))
 
     return result
