@@ -1,5 +1,21 @@
 # ReelClean Development Log
 
+## Session 3 
+### Sunday March 29th
+<br>
+
+**Summary:** This session focused on Docker containerization for the application. Added Dockerfile and Docker Compose configuration to enable containerized deployment. Updated documentation including README, AGENTS.md, and ARCHITECTURE_REFERENCE.md. 
+
+**Git Branch:** main <br>
+**Git commits:** <br>
+e06ca87, 3710935 
+
+**Session git history:** 
+- Update docs 20260329-1254 - *Updated documentation including .env.example, README.md, and docker-compose.example.yml*
+- Initial Docker Release 20260329-1223 - *Added Dockerfile, LICENSE, and Docker Compose configuration for containerized deployment*
+---
+<br>
+
 ## Session 2 
 ### Sunday March 29th
 <br>
