@@ -21,7 +21,6 @@ from reelclean.web.job_manager import (
     JobNotFoundError,
 )
 
-
 load_dotenv()
 
 
@@ -109,7 +108,10 @@ def create_app() -> Flask:
             return redirect(url_for("index"))
 
         if not allowed_map:
-            flash("No directories configured. Set REELCLEAN_ALLOWED_DIRS.", "danger")
+            flash(
+                "No directories configured. Mount folders under /data or set REELCLEAN_ALLOWED_DIRS.",
+                "danger",
+            )
             return redirect(url_for("index"))
 
         root_dir = allowed_map.get(selected_dir)

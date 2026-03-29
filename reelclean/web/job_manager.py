@@ -24,7 +24,6 @@ from reelclean.core.rename_service import apply_decision, plan_renames, retry_pr
 from reelclean.core.scan import find_all_movies_and_subs
 from reelclean.core.tmdb import TMDBClient
 
-
 MODE_RENAME_ONLY = "rename_only"
 MODE_QUALITY_ONLY = "quality_only"
 MODE_RENAME_AND_QUALITY = "rename_and_quality"
@@ -103,7 +102,9 @@ class JobManager:
     def __init__(self, allowed_roots: list[Path] | None = None) -> None:
         self._jobs: dict[str, JobState] = {}
         self._lock = Lock()
-        self._allowed_roots = [root.expanduser().resolve() for root in (allowed_roots or [])]
+        self._allowed_roots = [
+            root.expanduser().resolve() for root in (allowed_roots or [])
+        ]
 
     def _is_allowed_root(self, candidate: Path) -> bool:
         if not self._allowed_roots:
@@ -122,7 +123,9 @@ class JobManager:
                 continue
         return False
 
-    def create_job(self, mode: str, root_dir: Path, tmdb_client: TMDBClient) -> JobState:
+    def create_job(
+        self, mode: str, root_dir: Path, tmdb_client: TMDBClient
+    ) -> JobState:
         """Create and initialize a new job for the selected mode."""
 
         if mode not in VALID_MODES:
@@ -145,7 +148,9 @@ class JobManager:
         if mode in {MODE_RENAME_ONLY, MODE_RENAME_AND_QUALITY}:
             movies = find_all_movies_and_subs(root_dir)
             job.movies_by_id = {movie.movie_id: movie for movie in movies}
-            job.proposals = plan_renames(movies, root_dir=root_dir, tmdb_client=tmdb_client)
+            job.proposals = plan_renames(
+                movies, root_dir=root_dir, tmdb_client=tmdb_client
+            )
             job.status = "planned"
         else:
             job.status = "quality_ready"
@@ -234,7 +239,9 @@ class JobManager:
         """Run quality scan and store results."""
 
         job = self.get_job(job_id)
-        job.quality_results = scan_directory_for_quality(job.root_dir, ffprobe_bin=ffprobe_bin)
+        job.quality_results = scan_directory_for_quality(
+            job.root_dir, ffprobe_bin=ffprobe_bin
+        )
         job.updated_at = utcnow()
         job.status = "completed"
         return job

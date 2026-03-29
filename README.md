@@ -35,11 +35,12 @@ Create `.env` from `.env.example` and set values:
 - `TMDB_TIMEOUT_SECONDS` request timeout (default `10`)
 - `FFPROBE_BIN` ffprobe binary (default `ffprobe`)
 - `FLASK_SECRET_KEY` session secret
-- `REELCLEAN_HOST` default `0.0.0.0`
-- `REELCLEAN_PORT` default `8000`
-- `REELCLEAN_ALLOWED_DIRS` comma list of `label:path`
-  - example: `Movies:/data/movies,Downloads:/data/downloads`
-- `REELCLEAN_LIBRARY_ROOT` optional fallback root to auto-discover child dirs
+
+Docker images default `REELCLEAN_LIBRARY_ROOT` to `/data`, so directory options are
+discovered from mounted folders without extra env vars.
+
+The app defaults to `0.0.0.0:3007` (you can still override with
+`REELCLEAN_HOST`/`REELCLEAN_PORT` when needed).
 
 ## Local Run
 
@@ -57,7 +58,7 @@ python3 -m pip install -r requirements.txt
 python3 app.py
 ```
 
-4. Open `http://localhost:8000`.
+4. Open `http://localhost:3007`.
 
 ## Docker Run
 
@@ -70,11 +71,12 @@ docker build -t reelclean:local .
 Run container:
 
 ```bash
-docker run --rm -p 8000:8000 \
+docker run --rm -p 3007:3007 \
   -e FLASK_SECRET_KEY=change-me \
   -e TMDB_API_KEY=your_tmdb_api_key \
-  -e REELCLEAN_ALLOWED_DIRS="Movies:/data/movies" \
-  -v /srv/media/movies:/data/movies \
+  -v /mnt/4tb/Storage/Films:/data/4tb-Films \
+  -v /mnt/4tb/Storage/New_Films:/data/4tb-New_Films \
+  -v /home/hutch/downloads/complete:/data/Downloads \
   reelclean:local
 ```
 
@@ -86,7 +88,16 @@ Use `docker-compose.example.yml` as a starting point:
 docker compose -f docker-compose.example.yml up -d
 ```
 
-Make sure host mount paths and `REELCLEAN_ALLOWED_DIRS` paths match.
+Directory setup is defined once in `docker-compose.example.yml` via volume mounts:
+
+- `/mnt/4tb/Storage/Films:/data/4tb-Films`
+- `/mnt/4tb/Storage/New_Films:/data/4tb-New_Films`
+- `/home/hutch/downloads/complete:/data/Downloads`
+
+ReelClean auto-discovers these three folder names (`4tb-Films`,
+`4tb-New_Films`, `Downloads`) in the UI.
+
+It does not publish host ports; attach the service to your reverse proxy network.
 
 ## GHCR Publishing
 

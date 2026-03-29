@@ -25,7 +25,7 @@ class ReelCleanConfig:
     ffprobe_bin: str = "ffprobe"
     flask_secret_key: str = "reelclean-dev-secret"
     reelclean_host: str = "0.0.0.0"
-    reelclean_port: int = 8000
+    reelclean_port: int = 3007
     reelclean_allowed_dirs_raw: str | None = None
     reelclean_library_root: Path | None = None
 
@@ -57,13 +57,13 @@ class ReelCleanConfig:
         )
         host = source.get("REELCLEAN_HOST", "0.0.0.0").strip() or "0.0.0.0"
 
-        port_raw = source.get("REELCLEAN_PORT", "8000")
+        port_raw = source.get("REELCLEAN_PORT", "3007")
         try:
             port = int(port_raw)
         except ValueError:
-            port = 8000
+            port = 3007
         if port <= 0:
-            port = 8000
+            port = 3007
 
         reelclean_allowed_dirs_raw = source.get("REELCLEAN_ALLOWED_DIRS")
         library_root_raw = source.get("REELCLEAN_LIBRARY_ROOT")

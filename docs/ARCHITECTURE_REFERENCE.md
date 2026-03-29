@@ -415,7 +415,7 @@ python3 -m unittest discover -s tests
 | `FFPROBE_BIN` | ffprobe | ffprobe binary path |
 | `FLASK_SECRET_KEY` | reelclean-dev-secret | Session encryption |
 | `REELCLEAN_HOST` | 0.0.0.0 | Bind address |
-| `REELCLEAN_PORT` | 8000 | Bind port |
+| `REELCLEAN_PORT` | 3007 | Bind port |
 | `REELCLEAN_ALLOWED_DIRS` | (none) | Comma-separated `label:path` pairs |
 | `REELCLEAN_LIBRARY_ROOT` | (none) | Auto-discover subdirectories |
 

@@ -4,7 +4,6 @@
 
 from __future__ import annotations
 
-import sys
 from pathlib import Path
 
 from reelclean.core.cleanup_service import discover_cleanup_candidates
@@ -107,7 +106,9 @@ def _review_proposals(
 def _print_plan_summary(proposals) -> None:
     accepted = sum(1 for proposal in proposals if proposal.decision == Decision.ACCEPT)
     skipped = sum(1 for proposal in proposals if proposal.decision == Decision.SKIP)
-    conflicts = sum(1 for proposal in proposals if proposal.status == ProposalStatus.CONFLICT)
+    conflicts = sum(
+        1 for proposal in proposals if proposal.status == ProposalStatus.CONFLICT
+    )
     review = sum(
         1
         for proposal in proposals

@@ -28,6 +28,8 @@ class ConfigTests(unittest.TestCase):
             }
         )
         self.assertEqual(config.tmdb_timeout_seconds, 10)
+        self.assertEqual(config.reelclean_host, "0.0.0.0")
+        self.assertEqual(config.reelclean_port, 3007)
 
     def test_parse_allowed_dirs(self) -> None:
         options = parse_allowed_dirs("Movies:/media/movies,/tmp/downloads")

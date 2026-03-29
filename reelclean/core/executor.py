@@ -34,7 +34,9 @@ def _rename_path(
     allow_overwrite: bool,
     safe_root: Path | None,
 ) -> OperationResult:
-    if safe_root and (not _is_within_root(source, safe_root) or not _is_within_root(target, safe_root)):
+    if safe_root and (
+        not _is_within_root(source, safe_root) or not _is_within_root(target, safe_root)
+    ):
         return OperationResult(
             kind=kind,
             source=source,

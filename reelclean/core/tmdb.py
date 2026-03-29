@@ -8,7 +8,6 @@ import requests
 
 from .models import TmdbMatch
 
-
 TMDB_URL = "https://api.themoviedb.org/3/search/movie"
 
 
@@ -32,7 +31,9 @@ class TMDBClient:
             params["year"] = year
 
         try:
-            response = requests.get(TMDB_URL, params=params, timeout=self.timeout_seconds)
+            response = requests.get(
+                TMDB_URL, params=params, timeout=self.timeout_seconds
+            )
             response.raise_for_status()
             payload = response.json()
         except (requests.RequestException, ValueError):

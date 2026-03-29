@@ -9,7 +9,6 @@ from pathlib import Path
 from .models import CleanupCandidate, CleanupKind
 from .scan import SUB_EXT, VIDEO_EXTS
 
-
 MOVIE_SAMPLE_PATTERNS = [
     "sample",
     "rarbg.com",

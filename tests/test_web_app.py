@@ -8,7 +8,6 @@ import tempfile
 import unittest
 import importlib.util
 
-
 HAS_FLASK = importlib.util.find_spec("flask") is not None
 
 

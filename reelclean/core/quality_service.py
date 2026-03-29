@@ -8,7 +8,6 @@ import subprocess
 
 from .models import QualityResult
 
-
 VIDEO_EXTENSIONS = {".mkv", ".mp4", ".avi", ".mov", ".wmv"}
 
 RESOLUTION_TIERS = {

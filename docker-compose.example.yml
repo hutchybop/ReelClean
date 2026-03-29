@@ -1,18 +1,43 @@
 services:
+
   reelclean:
     image: ghcr.io/hutchybop/reelclean:latest
     container_name: reelclean
     restart: unless-stopped
-    ports:
-      - "8000:8000"
+
+    env_file:
+      - .env
+
     environment:
-      FLASK_SECRET_KEY: change-me
-      TMDB_API_KEY: your_tmdb_api_key
-      TMDB_TIMEOUT_SECONDS: "10"
       FFPROBE_BIN: ffprobe
-      REELCLEAN_ALLOWED_DIRS: Movies:/data/movies,Downloads:/data/downloads
-      REELCLEAN_HOST: 0.0.0.0
-      REELCLEAN_PORT: "8000"
+
     volumes:
-      - /srv/media/movies:/data/movies
-      - /srv/media/downloads:/data/downloads
+      - /mnt/4tb/Storage/Films:/data/4tb-Films
+      - /mnt/4tb/Storage/New_Films:/data/4tb-New_Films
+      - /home/hutch/downloads/complete:/data/Downloads
+
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:3007/health', timeout=5)"
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+    networks:
+      - npm_network
+
+networks:
+  npm_network:
+    external: true

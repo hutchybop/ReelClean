@@ -14,7 +14,7 @@ pip3 install -r requirements.txt
 python3 app.py
 
 # Run with gunicorn (production)
-gunicorn -w 2 -b 0.0.0.0:8000 "app:create_app()"
+gunicorn --config gunicorn.conf.py app:app
 ```
 
 ### Running Tests
@@ -39,7 +39,7 @@ TMDB_TIMEOUT_SECONDS=10
 FFPROBE_BIN=ffprobe
 FLASK_SECRET_KEY=your_secret
 REELCLEAN_HOST=0.0.0.0
-REELCLEAN_PORT=8000
+REELCLEAN_PORT=3007
 REELCLEAN_ALLOWED_DIRS="Movies:/path/to/movies,Downloads:/path/to/downloads"
 REELCLEAN_LIBRARY_ROOT=/path/to/media
 ```
