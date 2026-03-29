@@ -1,5 +1,20 @@
 # ReelClean Development Log
 
+## Session 4 
+### Sunday March 29th
+<br>
+
+**Summary:** This session focused on improving code quality tooling. Updated linting configuration by adding .flake8 and pyproject.toml files for consistent code standards enforcement across the project. 
+
+**Git Branch:** main <br>
+**Git commits:** <br>
+7ee466e 
+
+**Session git history:** 
+- Update linting 20260329-1344 - *Added .flake8 and pyproject.toml for improved linting and code quality*
+---
+<br>
+
 ## Session 3 
 ### Sunday March 29th
 <br>
