@@ -21,7 +21,7 @@ class FlaskAppTests(unittest.TestCase):
             os.environ["TMDB_API_KEY"] = ""
             os.environ["FLASK_SECRET_KEY"] = "test-secret"
 
-            from app import create_app
+            from web import create_app
 
             app = create_app()
             client = app.test_client()

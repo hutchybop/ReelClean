@@ -14,7 +14,7 @@ ReelClean is a Flask-based web application that helps users organize movie files
 
 | Component | Purpose |
 |-----------|---------|
-| `app.py` | Flask entrypoint, route handlers, template rendering |
+| `web.py` | Flask entrypoint, route handlers, template rendering |
 | `reelclean/core/config.py` | Environment-based configuration management |
 | `reelclean/core/scan.py` | Filesystem scanning, title normalization |
 | `reelclean/core/tmdb.py` | TMDB API client for movie lookups |
@@ -33,7 +33,7 @@ ReelClean is a Flask-based web application that helps users organize movie files
 
 ```mermaid
 flowchart TD
-    A[User Request] --> B[Flask Route Handler<br/>app.py]
+    A[User Request] --> B[Flask Route Handler<br/>web.py]
     B --> C{Job State<br/>Required?}
     C -->|Yes| D[JobManager.get_job]
     C -->|No| E[Direct Response]
@@ -127,7 +127,7 @@ flowchart LR
 
 | File | Purpose | Key Exports |
 |------|---------|-------------|
-| `app.py` | Flask app factory and route handlers | `create_app()`, all route functions |
+| `web.py` | Flask app factory and route handlers | `create_app()`, all route functions |
 
 ### `reelclean/core/` Modules
 
@@ -167,7 +167,10 @@ flowchart LR
 | `static/css/base.css` | Global styles |
 | `static/css/cleanup.css` | Cleanup page styles |
 | `static/css/dry_run.css` | Dry-run page styles |
+| `static/css/quality.css` | Quality scan page styles |
+| `static/css/job_overview.css` | Job overview page styles |
 | `static/js/cleanup.js` | Cleanup page interactivity |
+| `static/js/dry_run.js` | Dry-run page interactivity (retry search) |
 
 ---
 
@@ -176,7 +179,7 @@ flowchart LR
 ### Dependency Graph
 
 ```
-app.py
+web.py
 ├── reelclean.core.config
 │   └── (no internal deps)
 ├── reelclean.core.models
@@ -206,9 +209,9 @@ app.py
 
 | Entry Point | Description |
 |-------------|-------------|
-| `python3 app.py` | Direct Flask development server |
+| `python3 web.py` | Direct Flask development server |
 | `flask run` | Via Flask CLI |
-| `gunicorn app:app` | Production WSGI server |
+| `gunicorn web:app` | Production WSGI server |
 | Docker: `docker run` | Containerized execution |
 
 ### Circular Dependencies
@@ -216,7 +219,7 @@ app.py
 **None detected.** The dependency graph is acyclic:
 - Core modules depend only on `models.py` (no circular refs)
 - `web/job_manager.py` depends on all core services
-- No module depends on `app.py`
+- No module depends on `web.py`
 
 ### Core Dependencies
 
@@ -340,7 +343,7 @@ JobState.quality_results
 
 | Interaction | Files Involved |
 |-------------|----------------|
-| Job creation | `app.py:create_job_route()` → `job_manager.py:create_job()` → `scan.py:find_all_movies_and_subs()` → `rename_service.py:plan_renames()` |
+| Job creation | `web.py:create_job_route()` → `job_manager.py:create_job()` → `scan.py:find_all_movies_and_subs()` → `rename_service.py:plan_renames()` |
 | TMDB lookup | `rename_service.py:plan_rename_for_movie()` → `tmdb.py:TMDBClient.lookup()` |
 | Conflict detection | `rename_service.py:recalculate_conflicts()` - checks duplicate targets and existing files |
 | Safe rename | `executor.py:execute_plan()` → `_rename_path()` - validates root containment |
@@ -355,12 +358,12 @@ JobState.quality_results
 
 | Feature Type | Files to Modify | New Files to Create |
 |--------------|----------------|---------------------|
-| **New job mode** | `job_manager.py` (add MODE_*, update JobState), `app.py` (new route), `models.py` (optional new model) | New template if UI needed |
+| **New job mode** | `job_manager.py` (add MODE_*, update JobState), `web.py` (new route), `models.py` (optional new model) | New template if UI needed |
 | **New rename source** | `rename_service.py` (new lookup function), potentially `tmdb.py` | New service file (e.g., `imdb.py`) |
 | **New cleanup detection** | `cleanup_service.py` (add new `_is_*` function), `models.py` (add CleanupKind) | - |
 | **Quality metric** | `quality_service.py` (add detection), `models.py` (add QualityResult field) | - |
-| **New UI page** | `app.py` (add route + handler), `templates/` | New template, optional CSS/JS |
-| **Alternative storage** | `job_manager.py` (replace in-memory dict), `app.py` (pass session/config) | New storage adapter |
+| **New UI page** | `web.py` (add route + handler), `templates/` | New template, optional CSS/JS |
+| **Alternative storage** | `job_manager.py` (replace in-memory dict), `web.py` (pass session/config) | New storage adapter |
 
 ### Configuration Extension
 
@@ -386,7 +389,7 @@ Example: Add Trakt.tv integration for watchlist:
    - Import: from reelclean.core.trakt import fetch_watchlist
    - Add method: JobManager.enrich_with_watchlist()
    
-4. Update app.py or template
+4. Update web.py or template
    - Import and use new functionality
 ```
 
@@ -442,4 +445,4 @@ python3 -m unittest discover -s tests
 
 ---
 
-*Generated from codebase analysis. Last updated: 2026-03-28*
+*Generated from codebase analysis. Last updated: 2026-03-29*

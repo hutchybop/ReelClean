@@ -19,7 +19,8 @@ review-first workflow:
 
 ## Project Structure
 
-- `app.py` Flask entrypoint
+- `web.py` Flask entrypoint
+- `scripts/` optional CLI wrappers around core services
 - `reelclean/core/` reusable scan/rename/cleanup/quality services
 - `reelclean/web/` web workflow state manager
 - `templates/` Jinja templates
@@ -44,6 +45,8 @@ The app defaults to `0.0.0.0:3007` (you can still override with
 
 ## Local Run
 
+Requires Python 3.12+.
+
 1. Install Python dependencies:
 
 ```bash
@@ -55,7 +58,7 @@ python3 -m pip install -r requirements.txt
 3. Start the web app:
 
 ```bash
-python3 app.py
+python3 web.py
 ```
 
 4. Open `http://localhost:3007`.
@@ -107,14 +110,49 @@ Workflow file: `.github/workflows/docker-publish.yml`
 - publishes to `ghcr.io/<owner>/<repo>`
 - tags include branch/tag, `sha-*`, and `latest` (on `main`)
 
+## Development
+
+Install dev dependencies for linting and formatting:
+
+```bash
+python3 -m pip install -r requirements-dev.txt
+```
+
+Lint and format code:
+
+```bash
+flake8 .
+black .
+```
+
 ## Tests
 
-Run unit tests:
+Run all unit tests:
 
 ```bash
 python3 -m unittest discover -s tests
 ```
 
+Run a single test:
+
+```bash
+python3 -m unittest tests.test_config.ConfigTests.test_from_env_parses_values
+```
+
 Health endpoint:
 
 - `GET /health` returns `{"status": "ok"}`
+
+## Requirements
+
+- Python 3.12+
+- Flask 3.x
+- See `requirements.txt` and `requirements-dev.txt` for full dependencies
+
+## For Developers
+
+See [docs/AGENTS.md](docs/AGENTS.md) for code style guidelines and development conventions.
+
+## License
+
+MIT License - see [LICENSE](LICENSE) file.

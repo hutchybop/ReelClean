@@ -13,7 +13,8 @@ from reelclean.core.quality_service import scan_directory_for_quality
 
 def main() -> int:
     if len(sys.argv) != 2:
-        print("Usage: python3 check_low_quality_videos.py <directory>")
+        script_name = Path(__file__).name
+        print(f"Usage: python3 {script_name} <directory>")
         return 1
 
     target_dir = Path(sys.argv[1]).expanduser().resolve()
