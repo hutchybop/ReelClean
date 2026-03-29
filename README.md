@@ -93,14 +93,12 @@ docker compose -f docker-compose.example.yml up -d
 
 Directory setup is defined once in `docker-compose.example.yml` via volume mounts:
 
-- `/mnt/4tb/Storage/Films:/data/4tb-Films`
-- `/mnt/4tb/Storage/New_Films:/data/4tb-New_Films`
-- `/home/hutch/downloads/complete:/data/Downloads`
+- `<local_path_1>:/data/<docker_dir_name_1>`
+- `<local_path_2>:/data/<docker_dir_name_2>`
 
-ReelClean auto-discovers these three folder names (`4tb-Films`,
-`4tb-New_Films`, `Downloads`) in the UI.
+Multiple directories can be defined
 
-It does not publish host ports; attach the service to your reverse proxy network.
+ReelClean auto-discovers these directory names for example `docker_dir_name_1`, in the UI.
 
 ## GHCR Publishing
 
