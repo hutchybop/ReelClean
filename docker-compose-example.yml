@@ -5,9 +5,6 @@ services:
     container_name: reelclean
     restart: unless-stopped
 
-    ports:
-      - "3007:3007"
-
     env_file:
       - .env
 
@@ -15,9 +12,9 @@ services:
       FFPROBE_BIN: ffprobe
 
     volumes:
-      - <local_path_1>:/data/<docker_dir_name_1>
-      - <local_path_2>:/data/<docker_dir_name_2>
-      # Can define multiple volumes
+      - /mnt/4tb/Storage/Films:/data/4tb-Films
+      - /mnt/4tb/Storage/New_Films:/data/4tb-New_Films
+      - /home/hutch/downloads/complete:/data/Downloads
 
     healthcheck:
       test:
@@ -38,3 +35,9 @@ services:
         max-size: "10m"
         max-file: "5"
 
+    networks:
+      - npm_network
+
+networks:
+  npm_network:
+    external: true
