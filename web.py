@@ -82,7 +82,7 @@ def create_app() -> Flask:
 
     @app.route("/health")
     def health() -> dict[str, str]:
-        return {"status": "ok"}
+        return {"status": "ok", "service": "reelclean"}
 
     @app.get("/")
     def index():

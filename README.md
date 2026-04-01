@@ -102,11 +102,12 @@ ReelClean auto-discovers these directory names for example `docker_dir_name_1`, 
 
 ## GHCR Publishing
 
-Workflow file: `.github/workflows/docker-publish.yml`
+Workflow file: `.github/workflows/docker-release.yml`
 
-- triggers on pushes to `main`, tags (`v*`), and manual runs
+- triggers on semver tag pushes only (for example `v0.1.0`)
+- enforces semver format `vX.Y.Z` and confirms the tagged commit is in `main`
 - publishes to `ghcr.io/<owner>/<repo>`
-- tags include branch/tag, `sha-*`, and `latest` (on `main`)
+- tags include `vX.Y.Z`, `sha-*`, and `latest`
 
 ## Development
 
