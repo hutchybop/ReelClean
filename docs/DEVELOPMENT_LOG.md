@@ -1,5 +1,26 @@
 # ReelClean Development Log 
 
+## Session 5 
+### Thursday April 2nd
+<br>
+
+**Summary:** This session focused on Docker workflow improvements and deployment automation. Added GitHub Actions workflow for automated container builds and releases, updated Docker configuration, and refined ignore files for cleaner builds. 
+
+**Git Branch:** main <br>
+**Git commits:** <br>
+399f040, e4ffa0c, 027908e, c60f499, 095aa5a, 2fe361c, 351626d 
+
+**Session git history:** 
+- Update docker flow 20260401-2002 - *Added GitHub Actions workflow for automated Docker builds and semver releases*
+- update docker config 20260401-1734 - *Refined Docker configuration for improved deployment*
+- Test ship 20260330-1924 - *Testing Docker build and release workflow*
+- Test ship 20260330-1839 - *Iterative testing of ship workflow*
+- Test ship 20260330-1835 - *Initial testing of release automation*
+- update ignore files 20260330-1733 - *Updated .dockerignore for cleaner builds*
+- Fix deploy script bug 20260329-1352 - *Fixed deployment script issues*
+---
+<br>
+
 ## Session 4 
 ### Sunday March 29th
 <br>

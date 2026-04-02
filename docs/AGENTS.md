@@ -29,10 +29,11 @@ python3 -m unittest tests.test_config
 python3 -m unittest tests.test_config.ConfigTests.test_from_env_parses_values
 ```
 
-### Linting & Formatting
+### Linting & Type Checking
 ```bash
 flake8 .                              # Lint with flake8
 black .                               # Format with black
+mypy .                                # Type check (if installed)
 ```
 
 ### Environment Variables
@@ -50,7 +51,8 @@ REELCLEAN_LIBRARY_ROOT=/path/to/media
 ## Code Style Guidelines
 
 ### Python Version & General
-- Python 3.12+ (use `#!/usr/bin/env python3` shebang)
+- Python 3.8+ (target in pyproject.toml)
+- Use `#!/usr/bin/env python3` shebang
 - Include `from __future__ import annotations` at the top of all files
 - 4 spaces for indentation (no tabs)
 - Maximum line length: 88 characters (Black default)
@@ -87,7 +89,6 @@ Use modern union syntax (Python 3.10+):
 ```python
 def lookup(self, title: str, year_hint: str | None = None) -> TmdbMatch | None:
 ```
-
 - Use `dict[str, Any]` for untyped dictionaries
 - Include return types on all functions
 
@@ -102,7 +103,6 @@ class TmdbMatch:
 ```
 
 ### Error Handling
-
 **API Calls:**
 ```python
 try:
@@ -150,19 +150,19 @@ reelclean/
 ├── __init__.py
 ├── core/
 │   ├── config.py         # Configuration from environment
-│   ├── models.py        # Dataclasses (Decision, TmdbMatch)
-│   ├── tmdb.py          # TMDB API client
-│   ├── scan.py          # Directory scanning, title cleaning
+│   ├── models.py         # Dataclasses (Decision, TmdbMatch)
+│   ├── tmdb.py           # TMDB API client
+│   ├── scan.py           # Directory scanning, title cleaning
 │   ├── rename_service.py
 │   ├── quality_service.py
 │   ├── cleanup_service.py
 │   └── executor.py
 ├── web/
-│   └── job_manager.py   # Job state machine
-tests/                   # unittest.TestCase tests
-web.py                   # Flask routes
-templates/               # Jinja2 templates
-static/                  # CSS, JS, assets
+│   └── job_manager.py    # Job state machine
+├── tests/                # unittest.TestCase tests
+├── web.py                # Flask routes
+├── templates/            # Jinja2 templates
+└── static/              # CSS, JS, assets
 ```
 
 ## Testing Guidelines
@@ -172,8 +172,8 @@ static/                  # CSS, JS, assets
 - Include edge cases: empty inputs, invalid values, network errors
 
 ## Security
-- Never commit API keys or secrets
+- Never commit API keys or secrets to version control
 - Use `.env.example` for required variables
-- Validate user input paths to prevent directory traversal
+- Validate user input paths to prevent directory traversal attacks
 - Use absolute paths for file operations
-- Verify operations stay within allowed directory roots
+- Verify all operations stay within allowed directory roots
