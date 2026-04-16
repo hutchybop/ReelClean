@@ -63,7 +63,7 @@ class TMDBClient:
         return TmdbMatch(
             title=title,
             year=year,
-            display_name=f"{title} ({year})",
+            display_name=f"{title} [{year}]",
             source_query=source_query,
         )
 

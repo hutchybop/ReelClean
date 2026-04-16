@@ -18,7 +18,7 @@ class FakeTMDB:
             return TmdbMatch(
                 title="Movie",
                 year="2020",
-                display_name="Movie (2020)",
+                display_name="Movie [2020]",
                 source_query=title,
             )
         return None
@@ -36,12 +36,12 @@ class JobManagerTests(unittest.TestCase):
 
             self.assertEqual(len(job.proposals), 1)
             proposal = job.proposals[0]
-            self.assertEqual(proposal.target_name, "Movie (2020)")
+            self.assertEqual(proposal.target_name, "Movie [2020]")
 
             manager.set_decision(job.job_id, proposal.movie_id, Decision.ACCEPT)
             manager.run_rename_stage(job.job_id)
 
-            renamed_path = root / "Movie (2020)" / "Movie (2020).mkv"
+            renamed_path = root / "Movie [2020]" / "Movie [2020].mkv"
             self.assertTrue(renamed_path.exists())
 
     def test_rejects_job_outside_allowed_roots(self) -> None:

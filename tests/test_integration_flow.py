@@ -19,7 +19,7 @@ class IntegrationTMDB:
         return TmdbMatch(
             title="Movie",
             year="2020",
-            display_name="Movie (2020)",
+            display_name="Movie [2020]",
             source_query=title,
         )
 
@@ -44,8 +44,8 @@ class IntegrationFlowTests(unittest.TestCase):
             manager.set_decision(job.job_id, proposal.movie_id, Decision.ACCEPT)
 
             job = manager.run_rename_stage(job.job_id)
-            renamed_movie = root / "Movie (2020)" / "Movie (2020).mkv"
-            renamed_subtitle = root / "Movie (2020)" / "Movie (2020).srt"
+            renamed_movie = root / "Movie [2020]" / "Movie [2020].mkv"
+            renamed_subtitle = root / "Movie [2020]" / "Movie [2020].srt"
             self.assertTrue(renamed_movie.exists())
             self.assertTrue(renamed_subtitle.exists())
 

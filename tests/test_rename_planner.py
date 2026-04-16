@@ -20,14 +20,14 @@ class FakeTMDBClient:
             return TmdbMatch(
                 title="Retry Film",
                 year="2001",
-                display_name="Retry Film (2001)",
+                display_name="Retry Film [2001]",
                 source_query=title,
             )
         if "movie" in normalized:
             return TmdbMatch(
                 title="Shared Name",
                 year="2020",
-                display_name="Shared Name (2020)",
+                display_name="Shared Name [2020]",
                 source_query=title,
             )
         return None
@@ -72,7 +72,7 @@ class RenamePlannerTests(unittest.TestCase):
             )
 
             self.assertEqual(updated.retry_count, 1)
-            self.assertEqual(updated.target_name, "Retry Film (2001)")
+            self.assertEqual(updated.target_name, "Retry Film [2001]")
 
 
 if __name__ == "__main__":
